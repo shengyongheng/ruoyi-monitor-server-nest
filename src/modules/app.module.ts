@@ -6,6 +6,7 @@ import { ConfigurationModule } from './configuration/configuration.module';
 import { ExceptionFilterModule } from './exception-filter/exception-filter.module';
 // import { ProfileModule } from '../profile/profile.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PipeModule } from './pipe/pipe.module';
 import { ArticleModule } from './article/article.module';
 import { GuardModule } from './guard/guard.module';
 import { MiddlewareModule } from './middleware/middleware.module';
@@ -17,6 +18,7 @@ import { WebsocketModule } from './websocket/websocket.module';
     UserModule,
     // ProfileModule,
     ArticleModule,
+    PipeModule,
     GuardModule,
     ExceptionFilterModule,
     MiddlewareModule,
