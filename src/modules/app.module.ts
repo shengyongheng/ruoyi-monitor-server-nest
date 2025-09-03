@@ -8,6 +8,8 @@ import { ExceptionFilterModule } from './exception-filter/exception-filter.modul
 // import { ProfileModule } from '../profile/profile.module';
 // import { UserModule } from '../user/user.module';
 import { ArticleModule } from './article/article.module';
+import { GuardModule } from './guard/guard.module';
+import { MiddlewareModule } from './middleware/middleware.module';
 import { WebsocketModule } from './websocket/websocket.module';
 
 @Module({
@@ -15,7 +17,9 @@ import { WebsocketModule } from './websocket/websocket.module';
     // UserModule,
     // ProfileModule,
     ArticleModule,
+    GuardModule,
     ExceptionFilterModule,
+    MiddlewareModule,
     ConfigurationModule,
     WebsocketModule,
     ConfigModule.forRoot({
