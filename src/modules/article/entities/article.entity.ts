@@ -1,5 +1,4 @@
-import { User } from 'src/modules/user/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Article {
@@ -9,7 +8,7 @@ export class Article {
   @Column()
   title: string;
 
-  // 在你设置@ManyToOne的地方，相关实体将有"关联 id"和外键。
-  @ManyToOne(() => User, (user) => user.articles)
-  user: User;
+  // // 在你设置@ManyToOne的地方，相关实体将有"关联 id"和外键。
+  // @ManyToOne(() => User, (user) => user.articles)
+  // user: User;
 }

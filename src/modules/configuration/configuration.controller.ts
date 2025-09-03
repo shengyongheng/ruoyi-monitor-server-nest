@@ -7,13 +7,17 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ConfigurationService } from './configuration.service';
 import { CreateConfigurationDto } from './dto/create-configuration.dto';
 import { UpdateConfigurationDto } from './dto/update-configuration.dto';
 
 @Controller('configuration')
 export class ConfigurationController {
-  constructor(private readonly configurationService: ConfigurationService) {}
+  constructor(
+    private readonly configurationService: ConfigurationService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Post()
   create(@Body() createConfigurationDto: CreateConfigurationDto) {
@@ -22,6 +26,8 @@ export class ConfigurationController {
 
   @Get()
   findAll() {
+    const databasePassword = this.configService.get('DATABASE_PASSWORD');
+    console.log('databasePassword:', databasePassword);
     return this.configurationService.findAll();
   }
 

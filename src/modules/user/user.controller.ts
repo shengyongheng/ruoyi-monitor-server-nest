@@ -21,11 +21,6 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
   @Get()
   @ApiOperation({
     summary: '获取用户列表',
@@ -34,7 +29,17 @@ export class UserController {
   @Header('Cache-Control', 'no-store')
   // @Redirect('https://baidu.com', 301)
   findAll(@Req() request: Request) {
-    return this.userService.findAll(request);
+    return this.userService.findAll();
+  }
+
+  @Post('/createMany')
+  createMany(@Body() createUserDtos: { users: Array<CreateUserDto> }) {
+    return this.userService.createMany(createUserDtos);
+  }
+
+  @Post()
+  create(@Body() createUserDto: CreateUserDto) {
+    return;
   }
 
   @Get(':id')
@@ -44,7 +49,7 @@ export class UserController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    return;
   }
 
   @Delete(':id')

@@ -1,42 +1,49 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Request } from 'express';
-import { Repository } from 'typeorm';
-import { Profile } from '../profile/entities/profile.entity';
+import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+    private readonly dataSource: DataSource,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
-    const profile = new Profile();
-    profile.gender = 'male';
-    profile.photo = 'https://example.com/photo.jpg';
-    const user = this.userRepository.create(createUserDto);
-    user.profile = profile;
-    return await this.userRepository.save(user);
+  findAll(): Promise<User[]> {
+    return this.usersRepository.find();
   }
 
-  findAll(request: Request) {
-    console.log(request.query);
-    return this.userRepository.find();
+  // 批量新增用户
+  async createMany(param: { users: Array<CreateUserDto> }) {
+    const users = param.users;
+    console.log('users:', users);
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.manager.save(User, users[0]);
+      await queryRunner.manager.save(User, users[1]);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      // 因为我们有错误，所以让我们回滚我们所做的更改
+      await queryRunner.rollbackTransaction();
+      throw err;
+    } finally {
+      // 手动释放 queryRunner 实例
+      await queryRunner.release();
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: number): Promise<User | null> {
+    return this.usersRepository.findOneBy({ id });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    console.log('updateUserDto', updateUserDto);
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<void> {
+    await this.usersRepository.delete(id);
   }
 }
