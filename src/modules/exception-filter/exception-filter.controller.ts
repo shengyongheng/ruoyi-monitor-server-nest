@@ -6,11 +6,14 @@ import {
   Param,
   Patch,
   Post,
+  UseFilters,
 } from '@nestjs/common';
 import { CreateExceptionFilterDto } from './dto/create-exception-filter.dto';
 import { UpdateExceptionFilterDto } from './dto/update-exception-filter.dto';
 import { ExceptionFilterService } from './exception-filter.service';
+import { HttpExceptionFilter } from '../../common/filters/HttpExceptionFilter';
 
+// @UseFilters(HttpExceptionFilter)
 @Controller('exception-filter')
 export class ExceptionFilterController {
   constructor(
@@ -23,6 +26,7 @@ export class ExceptionFilterController {
   }
 
   @Get()
+  // @UseFilters(HttpExceptionFilter)
   findAll() {
     return this.exceptionFilterService.findAll();
   }

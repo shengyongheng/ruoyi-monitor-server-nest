@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Article } from 'src/modules/article/entities/article.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
 export class User {
@@ -13,4 +14,7 @@ export class User {
 
   @Column({ type: 'boolean', name: 'is_active', default: true })
   isActive: boolean;
+
+  @OneToMany(() => Article, (article) => article.user)
+  articles: Article[];
 }

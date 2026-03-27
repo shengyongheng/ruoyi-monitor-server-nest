@@ -1,6 +1,7 @@
+import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-export const databaseConfig: TypeOrmModuleOptions = {
+const databaseConfig: TypeOrmModuleOptions = {
   type: 'mysql',
   host: '127.0.0.1',
   port: 3306,
@@ -12,3 +13,5 @@ export const databaseConfig: TypeOrmModuleOptions = {
   logging: process.env.NODE_ENV !== 'production',
   //   ssl: process.env.DB_SSL === 'true',
 };
+
+export default registerAs('database', () => databaseConfig);

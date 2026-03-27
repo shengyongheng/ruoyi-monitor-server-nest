@@ -21,16 +21,13 @@ export class PipeController {
   constructor(private readonly pipeService: PipeService) {}
 
   @Post()
-  create(
-    @Body() createPipeDto: CreatePipeDto,
-    @Query('id', new DefaultValuePipe(9), ParseIntPipe) id: number,
-  ) {
-    console.log('id:', id);
+  create(@Body() createPipeDto: CreatePipeDto) {
     return this.pipeService.create(createPipeDto);
   }
 
   @Get()
-  findAll() {
+  findAll(@Query('id', new DefaultValuePipe(9), ParseIntPipe) id: number) {
+    console.log('id:', id);
     return this.pipeService.findAll();
   }
 
@@ -42,7 +39,7 @@ export class PipeController {
       new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
       ValidationPipe,
     )
-    id,
+    id: number,
   ) {
     console.log('id:', typeof id, id);
     // return this.pipeService.findOne(+id);

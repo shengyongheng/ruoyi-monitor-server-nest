@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MiddlewareService } from './middleware.service';
 import { CreateMiddlewareDto } from './dto/create-middleware.dto';
 import { UpdateMiddlewareDto } from './dto/update-middleware.dto';
@@ -12,8 +20,13 @@ export class MiddlewareController {
     return this.middlewareService.create(createMiddlewareDto);
   }
 
-  @Get()
-  findAll() {
+  @Get('/include')
+  include() {
+    return this.middlewareService.findAll();
+  }
+
+  @Post('/exclude')
+  exclude() {
     return this.middlewareService.findAll();
   }
 
@@ -23,7 +36,10 @@ export class MiddlewareController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMiddlewareDto: UpdateMiddlewareDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateMiddlewareDto: UpdateMiddlewareDto,
+  ) {
     return this.middlewareService.update(+id, updateMiddlewareDto);
   }
 

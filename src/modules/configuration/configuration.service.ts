@@ -13,9 +13,9 @@ export class ConfigurationService {
 
   findAll() {
     // get an environment variable
-    const dbUser = this.configService.get<string>('DATABASE_USER');
+    const appPort = this.configService.get<string>('app.port');
 
-    console.log(dbUser);
+    console.log('服务端口:', appPort);
 
     return `This action returns all configuration`;
   }

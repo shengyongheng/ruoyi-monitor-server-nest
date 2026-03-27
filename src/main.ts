@@ -1,11 +1,13 @@
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import * as compression from 'compression';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { join } from 'path';
 import { ResponseInterceptor } from './common/interceptors/responseInterceptor';
 import { AppModule } from './modules/app.module';
+import { HttpExceptionFilter } from './common/filters/HttpExceptionFilter';
+import { CatchEverythingFilter } from './common/filters/CatchEverythingFilter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -16,10 +18,13 @@ async function bootstrap() {
     //   prefix: 'MyApp', // 为每条日志消息配置前缀，Default is "Nest"
     //   json: true,
     // }),
+    abortOnError: false, // 默认情况下，如果在创建应用程序时发生任何错误，您的应用程序将以代码 1 退出。如果您想让它抛出错误，请禁用 abortOnError 选项（例如， NestFactory.create(AppModule, { abortOnError: false }) ）。
   });
   app.use(compression());
-  app.useGlobalInterceptors(new ResponseInterceptor());
+  // app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new HttpExceptionFilter());
+  // app.useGlobalFilters(new CatchEverythingFilter(new HttpAdapterHost()));
   app.useStaticAssets(join(__dirname, 'src/static/images'), {
     prefix: '/images',
   });
@@ -30,9 +35,14 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('/api-docs', app, document);
-  console.log('process.env.SERVER_PORT:', process.env.SERVER_PORT);
 
   await app.listen(process.env.SERVER_PORT ?? 3000);
 }
 
-bootstrap();
+bootstrap()
+  .then(() => {
+    console.log('nest server listen port:', process.env.SERVER_PORT);
+  })
+  .catch((error) => {
+    console.log('bootstrap error:', JSON.stringify(error));
+  });

@@ -15,11 +15,15 @@ import { Request } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
+import { ArticleService } from '../article/article.service';
 
 @Controller('user')
 @ApiTags('用户模块')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly articleService: ArticleService,
+  ) {}
 
   @Get()
   @ApiOperation({
@@ -29,6 +33,7 @@ export class UserController {
   @Header('Cache-Control', 'no-store')
   // @Redirect('https://baidu.com', 301)
   findAll(@Req() request: Request) {
+    console.log('使用 ArticleModule 共享模块:', this.articleService.findAll());
     return this.userService.findAll();
   }
 

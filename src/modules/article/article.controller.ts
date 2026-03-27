@@ -13,6 +13,15 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 
 @Controller('article')
 export class ArticleController {
+  /**
+   * 减少样板代码  NestJS / DI 场景非常常见
+   * 等价写法
+      private readonly articleService: ArticleService
+
+      constructor(articleService: ArticleService) {
+          this.articleService = articleService
+      }
+ **/
   constructor(private readonly articleService: ArticleService) {}
 
   @Post()

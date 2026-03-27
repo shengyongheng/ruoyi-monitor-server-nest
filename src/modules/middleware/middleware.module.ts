@@ -16,6 +16,7 @@ export class MiddlewareModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .forRoutes({ path: 'middleware', method: RequestMethod.GET });
+      .exclude({ path: 'middleware/exclude', method: RequestMethod.POST })
+      .forRoutes({ path: 'middleware/include', method: RequestMethod.GET });
   }
 }

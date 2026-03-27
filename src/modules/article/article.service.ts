@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 
@@ -9,6 +9,7 @@ export class ArticleService {
   }
 
   findAll() {
+    // throw new NotFoundException('Cat not found article findAll()');
     return `This action returns all article`;
   }
 
