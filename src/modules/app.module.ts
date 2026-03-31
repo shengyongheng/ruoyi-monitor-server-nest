@@ -19,6 +19,8 @@ import { ProfileModule } from './profile/profile.module';
 import { TaskSchedulingModule } from './task-scheduling/task-scheduling.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksService } from 'src/common/task/task';
+import { CookieModule } from './cookie/cookie.module';
+import { SerializationModule } from './serialization/serialization.module';
 @Module({
   imports: [
     UserModule,
@@ -31,6 +33,8 @@ import { TasksService } from 'src/common/task/task';
     ConfigurationModule,
     WebsocketModule,
     TaskSchedulingModule,
+    CookieModule,
+    SerializationModule,
     ConfigModule.forRoot({
       // 分配给 load 属性的值是一个数组，允许您加载多个配置文件（例如 load: [databaseConfig, authConfig] ）
       load: [appConfig],

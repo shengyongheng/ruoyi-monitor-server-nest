@@ -5,8 +5,8 @@ import { Cron } from '@nestjs/schedule';
 export class TasksService {
   private readonly logger = new Logger(TasksService.name);
 
-  @Cron('30 * * * * *')
-  handleCron() {
-    this.logger.debug('Called every 30 seconds');
-  }
+  // @Cron('30 * * * * *')
+  // handleCron() {
+  //   this.logger.debug('Called every 30 seconds');
+  // }
 }

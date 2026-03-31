@@ -16,17 +16,24 @@ export class UserService {
     return this.usersRepository.find();
   }
 
+  /**
+   * 调用 articlesRepository
+   */
+  useArticlesRepository() {
+    return;
+  }
+
   // 批量新增用户
   async createMany(param: { users: Array<CreateUserDto> }) {
     const users = param.users;
-    console.log('users:', users);
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      await queryRunner.manager.save(User, users[0]);
-      await queryRunner.manager.save(User, users[1]);
+      for (const user of users) {
+        await queryRunner.manager.save(User, user);
+      }
 
       await queryRunner.commitTransaction();
     } catch (err) {
