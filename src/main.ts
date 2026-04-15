@@ -21,11 +21,11 @@ async function bootstrap() {
     abortOnError: false, // 默认情况下，如果在创建应用程序时发生任何错误，您的应用程序将以代码 1 退出。如果您想让它抛出错误，请禁用 abortOnError 选项（例如， NestFactory.create(AppModule, { abortOnError: false }) ）。
   });
   app.use(compression());
-  // app.useGlobalInterceptors(new ResponseInterceptor());
+  app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
   // app.useGlobalFilters(new CatchEverythingFilter(new HttpAdapterHost()));
-  app.useStaticAssets(join(__dirname, 'src/static/images'), {
+  app.useStaticAssets(join(__dirname, '../src/static/images'), {
     prefix: '/images',
   });
   const options = new DocumentBuilder()

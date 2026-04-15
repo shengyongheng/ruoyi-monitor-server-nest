@@ -21,6 +21,14 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TasksService } from 'src/common/task/task';
 import { CookieModule } from './cookie/cookie.module';
 import { SerializationModule } from './serialization/serialization.module';
+import { AuthModule } from './auth/auth.module';
+import { ValidationModule } from './validation/validation.module';
+import { RuoyiMonitorModule } from './sdk/ruoyi-monitor/ruoyi-monitor.module';
+import { MonitorUserbehaviorModule } from './system/monitor-userbehavior/monitor-userbehavior.module';
+import { MonitorPerformanceModule } from './system/monitor-performance/monitor-performance.module';
+import { MonitorErrorModule } from './system/monitor-error/monitor-error.module';
+import { MonitorResourceModule } from './system/monitor-resource/monitor-resource.module';
+import { MonitorEnvironmentModule } from './system/monitor-environment/monitor-environment.module';
 @Module({
   imports: [
     UserModule,
@@ -35,6 +43,8 @@ import { SerializationModule } from './serialization/serialization.module';
     TaskSchedulingModule,
     CookieModule,
     SerializationModule,
+    AuthModule,
+    ValidationModule,
     ConfigModule.forRoot({
       // 分配给 load 属性的值是一个数组，允许您加载多个配置文件（例如 load: [databaseConfig, authConfig] ）
       load: [appConfig],
@@ -54,6 +64,12 @@ import { SerializationModule } from './serialization/serialization.module';
       synchronize: true,
     }),
     ScheduleModule.forRoot(),
+    RuoyiMonitorModule,
+    MonitorUserbehaviorModule,
+    MonitorPerformanceModule,
+    MonitorErrorModule,
+    MonitorResourceModule,
+    MonitorEnvironmentModule,
   ],
   providers: [TasksService],
 })

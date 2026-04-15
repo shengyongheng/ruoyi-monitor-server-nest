@@ -16,6 +16,10 @@ export class UserService {
     return this.usersRepository.find();
   }
 
+  findOne(firstName: string): Promise<User | null> {
+    return this.usersRepository.findOneBy({ firstName });
+  }
+
   /**
    * 调用 articlesRepository
    */
@@ -44,10 +48,6 @@ export class UserService {
       // 手动释放 queryRunner 实例
       await queryRunner.release();
     }
-  }
-
-  findOne(id: number): Promise<User | null> {
-    return this.usersRepository.findOneBy({ id });
   }
 
   async remove(id: number): Promise<void> {
