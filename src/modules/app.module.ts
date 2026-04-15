@@ -2,27 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import appConfig from 'src/config/app.config';
 // import { databaseConfig } from '../../config/database.config';
-import { ConfigurationModule } from './configuration/configuration.module';
-import { ExceptionFilterModule } from './exception-filter/exception-filter.module';
-// import { ProfileModule } from '../profile/profile.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PipeModule } from './pipe/pipe.module';
-import { ArticleModule } from './article/article.module';
-import { GuardModule } from './guard/guard.module';
-import { MiddlewareModule } from './middleware/middleware.module';
-import { User } from './user/entities/user.entity';
-import { UserModule } from './user/user.module';
-import { WebsocketModule } from './websocket/websocket.module';
-import { Profile } from './profile/entities/profile.entity';
-import { Article } from './article/entities/article.entity';
-import { ProfileModule } from './profile/profile.module';
-import { TaskSchedulingModule } from './task-scheduling/task-scheduling.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksService } from 'src/common/task/task';
-import { CookieModule } from './cookie/cookie.module';
-import { SerializationModule } from './serialization/serialization.module';
-import { AuthModule } from './auth/auth.module';
-import { ValidationModule } from './validation/validation.module';
 import { RuoyiMonitorModule } from './sdk/ruoyi-monitor/ruoyi-monitor.module';
 import { MonitorUserbehaviorModule } from './system/monitor-userbehavior/monitor-userbehavior.module';
 import { MonitorPerformanceModule } from './system/monitor-performance/monitor-performance.module';
@@ -31,20 +13,6 @@ import { MonitorResourceModule } from './system/monitor-resource/monitor-resourc
 import { MonitorEnvironmentModule } from './system/monitor-environment/monitor-environment.module';
 @Module({
   imports: [
-    UserModule,
-    ProfileModule,
-    ArticleModule,
-    PipeModule,
-    GuardModule,
-    ExceptionFilterModule,
-    MiddlewareModule,
-    ConfigurationModule,
-    WebsocketModule,
-    TaskSchedulingModule,
-    CookieModule,
-    SerializationModule,
-    AuthModule,
-    ValidationModule,
     ConfigModule.forRoot({
       // 分配给 load 属性的值是一个数组，允许您加载多个配置文件（例如 load: [databaseConfig, authConfig] ）
       load: [appConfig],
@@ -59,8 +27,8 @@ import { MonitorEnvironmentModule } from './system/monitor-environment/monitor-e
       port: 3306,
       username: 'root',
       password: 'admin123',
-      database: 'nest_db',
-      entities: [User, Profile, Article],
+      database: 'ruoyi_monitor',
+      entities: [],
       synchronize: true,
     }),
     ScheduleModule.forRoot(),
