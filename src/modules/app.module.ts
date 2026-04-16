@@ -17,6 +17,10 @@ import { SysMenuEntity } from './system/sys-menu/entities/sys-menu.entity';
 import { MonitorUserBehavior } from './system/monitor-userbehavior/entities/monitor-userbehavior.entity';
 import { MonitorPageStaytime } from './system/monitor-userbehavior/entities/monitor-page-staytime.entity';
 import { MonitorRouteChange } from './system/monitor-userbehavior/entities/monitor-route-change.entity';
+import { MonitorErrorJs } from './system/monitor-error/entities/monitor-error-js.entity';
+import { MonitorRrweb } from './system/monitor-error/entities/monitor-rrweb.entity';
+import { MonitorErrorRequest } from './system/monitor-error/entities/monitor-error-request.entity';
+import { MonitorErrorResource } from './system/monitor-error/entities/monitor-error-resource.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -39,6 +43,10 @@ import { MonitorRouteChange } from './system/monitor-userbehavior/entities/monit
         MonitorUserBehavior,
         MonitorPageStaytime,
         MonitorRouteChange,
+        MonitorErrorJs,
+        MonitorRrweb,
+        MonitorErrorRequest,
+        MonitorErrorResource,
       ],
       synchronize: true,
     }),

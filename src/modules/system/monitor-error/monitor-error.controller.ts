@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { MonitorErrorService } from './monitor-error.service';
 
 @Controller('monitor-error')
@@ -11,14 +11,25 @@ export class MonitorErrorController {
   }
 
   @Get('error_detail_list')
-  getErrorDetailList() {}
+  async getErrorDetailList() {
+    return await this.monitorErrorService.getErrorDetailList();
+  }
 
   @Get('rrweb-events/:id')
-  getRRwebPlayEvents() {}
+  async getRRwebPlayEvents(@Param('id') id: number) {
+    return await this.monitorErrorService.getRRwebPlayEvents(id);
+  }
 
   @Get('error_count')
-  errorCount() {}
+  async errorCount() {
+    return await this.monitorErrorService.errorCount();
+  }
 
   @Get('error_count_trend')
-  errorTrendCount() {}
+  async errorTrendCount(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+  ) {
+    return await this.monitorErrorService.errorTrendCount(startDate, endDate);
+  }
 }

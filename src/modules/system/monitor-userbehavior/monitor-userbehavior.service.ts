@@ -10,7 +10,7 @@ import {
   PageStayTimeTypeEnum,
   RouteChangeTypeEnum,
   UserBehaviorTypeEnum,
-} from './enum/monitor-userbehavior.enum';
+} from './enums/monitor-userbehavior.enum';
 import { Repository } from 'typeorm';
 import { MonitorUserBehavior } from './entities/monitor-userbehavior.entity';
 import { InjectRepository } from '@nestjs/typeorm';

@@ -16,3 +16,16 @@ export class SourceMapVo {
 
   stack?: string;
 }
+
+export class ErrorCountVo {
+  allErrorCount: number;
+  jsErrorCount: number;
+  resourceErrorCount: number;
+  requestErrorCount: number;
+}
+export class ErrorTrendCountVo {
+  xDatas: string[];
+  jsErrorCount: number[];
+  resourceErrorCount: number[];
+  requestErrorCount: number[];
+}
