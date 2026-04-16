@@ -6,7 +6,9 @@ export class MonitorErrorController {
   constructor(private readonly monitorErrorService: MonitorErrorService) {}
 
   @Get('error_sourcemap')
-  jsErrorSourcemapContext() {}
+  async jsErrorSourcemapContext() {
+    return await this.monitorErrorService.jsErrorSourcemapContext();
+  }
 
   @Get('error_detail_list')
   getErrorDetailList() {}
