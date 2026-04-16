@@ -11,6 +11,12 @@ import { MonitorPerformanceModule } from './system/monitor-performance/monitor-p
 import { MonitorErrorModule } from './system/monitor-error/monitor-error.module';
 import { MonitorResourceModule } from './system/monitor-resource/monitor-resource.module';
 import { MonitorEnvironmentModule } from './system/monitor-environment/monitor-environment.module';
+import { SysUserModule } from './system/sys-user/sys-user.module';
+import { SysMenuModule } from './system/sys-menu/sys-menu.module';
+import { SysMenuEntity } from './system/sys-menu/entities/sys-menu.entity';
+import { MonitorUserBehavior } from './system/monitor-userbehavior/entities/monitor-userbehavior.entity';
+import { MonitorPageStaytime } from './system/monitor-userbehavior/entities/monitor-page-staytime.entity';
+import { MonitorRouteChange } from './system/monitor-userbehavior/entities/monitor-route-change.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,7 +34,12 @@ import { MonitorEnvironmentModule } from './system/monitor-environment/monitor-e
       username: 'root',
       password: 'admin123',
       database: 'ruoyi_monitor',
-      entities: [],
+      entities: [
+        SysMenuEntity,
+        MonitorUserBehavior,
+        MonitorPageStaytime,
+        MonitorRouteChange,
+      ],
       synchronize: true,
     }),
     ScheduleModule.forRoot(),
@@ -38,6 +49,8 @@ import { MonitorEnvironmentModule } from './system/monitor-environment/monitor-e
     MonitorErrorModule,
     MonitorResourceModule,
     MonitorEnvironmentModule,
+    SysUserModule,
+    SysMenuModule,
   ],
   providers: [TasksService],
 })

@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity({ name: 'monitor_userbehavior', comment: '用户行为表' })
-export class MonitorUserBehavior {
+@Entity({ name: 'monitor_page_staytime', comment: '页面停留时间表' })
+export class MonitorPageStaytime {
   @PrimaryGeneratedColumn({ type: 'bigint', comment: '主键ID' })
   id: number;
 
@@ -44,6 +44,12 @@ export class MonitorUserBehavior {
   @Column({ type: 'varchar', length: 32, nullable: false, comment: '用户名' })
   username: string;
 
-  @Column({ type: 'text', nullable: true, comment: '用户行为描述' })
-  description: string;
+  @Column({
+    name: 'stay_time',
+    type: 'bigint',
+    nullable: true,
+    default: null,
+    comment: '页面停留时间',
+  })
+  stayTime: number;
 }

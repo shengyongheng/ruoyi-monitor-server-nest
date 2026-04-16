@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity({ name: 'monitor_userbehavior', comment: '用户行为表' })
-export class MonitorUserBehavior {
+@Entity({ name: 'monitor_route_change', comment: '路由变化表' })
+export class MonitorRouteChange {
   @PrimaryGeneratedColumn({ type: 'bigint', comment: '主键ID' })
   id: number;
 
@@ -44,6 +44,40 @@ export class MonitorUserBehavior {
   @Column({ type: 'varchar', length: 32, nullable: false, comment: '用户名' })
   username: string;
 
-  @Column({ type: 'text', nullable: true, comment: '用户行为描述' })
-  description: string;
+  @Column({
+    name: 'triger_type',
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    default: null,
+    comment: '触发类型',
+  })
+  trigerType: string;
+
+  @Column({
+    name: 'new_url',
+    type: 'varchar',
+    length: 200,
+    nullable: false,
+    comment: '新URL',
+  })
+  newUrl: string;
+
+  @Column({
+    name: 'old_url',
+    type: 'varchar',
+    length: 200,
+    nullable: false,
+    comment: '旧URL',
+  })
+  oldUrl: string;
+
+  @Column({
+    name: 'hash_stay_time',
+    type: 'bigint',
+    nullable: true,
+    default: null,
+    comment: 'hash 页面停留时间',
+  })
+  hashStayTime: string;
 }
