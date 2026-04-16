@@ -21,6 +21,10 @@ import { MonitorErrorJs } from './system/monitor-error/entities/monitor-error-js
 import { MonitorRrweb } from './system/monitor-error/entities/monitor-rrweb.entity';
 import { MonitorErrorRequest } from './system/monitor-error/entities/monitor-error-request.entity';
 import { MonitorErrorResource } from './system/monitor-error/entities/monitor-error-resource.entity';
+import { MonitorResource } from './system/monitor-resource/entities/monitor-resource.entity';
+import { MonitorPerformanceMetric } from './system/monitor-performance/entities/monitor-performance-metric.entity';
+import { SysPageloadMetricAgg } from './system/monitor-performance/entities/sys-pageload-metric-agg.entity';
+import { SysPerformanceMetricAgg } from './system/monitor-performance/entities/sys-performance-metric-agg.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -47,6 +51,10 @@ import { MonitorErrorResource } from './system/monitor-error/entities/monitor-er
         MonitorRrweb,
         MonitorErrorRequest,
         MonitorErrorResource,
+        MonitorResource,
+        MonitorPerformanceMetric,
+        SysPageloadMetricAgg,
+        SysPerformanceMetricAgg,
       ],
       synchronize: true,
     }),

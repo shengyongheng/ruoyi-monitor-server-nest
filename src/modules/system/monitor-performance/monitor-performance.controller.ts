@@ -8,8 +8,12 @@ export class MonitorPerformanceController {
   ) {}
 
   @Get('performance_metrics_agg')
-  getPerformanceMetricsAgg() {}
+  async getPerformanceMetricsAgg() {
+    return await this.monitorPerformanceService.getPerformanceMetricAgg();
+  }
 
   @Get('pageload_metrics_agg')
-  getPageLoadMetricsAgg() {}
+  async getPageLoadMetricsAgg() {
+    return await this.monitorPerformanceService.getPerformanceMetricAgg();
+  }
 }

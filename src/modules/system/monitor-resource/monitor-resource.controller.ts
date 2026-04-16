@@ -1,13 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { MonitorResourceService } from './monitor-resource.service';
+import { ResourceSessionDto } from './dto/monitor-resource.dto';
 
 @Controller('monitor-resource')
 export class MonitorResourceController {
@@ -15,12 +8,20 @@ export class MonitorResourceController {
     private readonly monitorResourceService: MonitorResourceService,
   ) {}
 
-  @Get('resource-statistics')
-  resourceStatistics() {}
+  @Get('resource_statistics')
+  async resourceStatistics() {
+    return await this.monitorResourceService.resourceStatistics();
+  }
 
   @Get('session_list')
-  getSessionList() {}
+  async getSessionList() {
+    return await this.monitorResourceService.getResourceSessionList();
+  }
 
   @Get('resource_detail_list')
-  getResourceDetailList() {}
+  async getResourceDetailList(@Query() resourceSessionDto: ResourceSessionDto) {
+    return await this.monitorResourceService.getResourceDetailList(
+      resourceSessionDto,
+    );
+  }
 }

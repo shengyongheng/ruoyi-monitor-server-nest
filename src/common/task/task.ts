@@ -1,12 +1,16 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
+import { MonitorPerformanceService } from 'src/modules/system/monitor-performance/monitor-performance.service';
 
 @Injectable()
 export class TasksService {
-  private readonly logger = new Logger(TasksService.name);
+  constructor(
+    private readonly monitorPerformaceService: MonitorPerformanceService,
+  ) {}
 
-  // @Cron('30 * * * * *')
-  // handleCron() {
-  //   this.logger.debug('Called every 30 seconds');
-  // }
+  @Cron('30 * * * * *')
+  async handleCron() {
+    await this.monitorPerformaceService.aggregatePerformanceMetric();
+    await this.monitorPerformaceService.aggregatePageLoadWaterfallMetrics();
+  }
 }
