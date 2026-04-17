@@ -11,10 +11,13 @@ export class Event {
   pageView: string;
   timestamp: number;
   userInfo: UserInfo;
-  data: { [key: string]: object };
+  data: {
+    // TODO 各类错误上报类型定义
+    [key: string]: object;
+  };
 }
 
-export class RuoyiMonitorDto {
+export class RuoyiMonitorReportDto {
   @IsString()
   @IsNotEmpty()
   projectKey: string;

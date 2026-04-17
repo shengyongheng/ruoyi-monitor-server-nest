@@ -4,11 +4,11 @@ import { Entity, Column } from 'typeorm';
 @Entity({ name: 'monitor_resource', comment: '前端资源性能监控表' })
 export class MonitorResource extends BaseEntity {
   @Column({
-    type: 'tinyint',
+    type: 'boolean',
     default: 0,
     comment: '是否命中缓存（0-未命中 1-命中）',
   })
-  cached: number;
+  cached: boolean;
 
   @Column({
     name: 'decoded_size',
