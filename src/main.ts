@@ -7,7 +7,7 @@ import { join } from 'path';
 import { ResponseInterceptor } from './common/interceptors/responseInterceptor';
 import { AppModule } from './modules/app.module';
 import { HttpExceptionFilter } from './common/filters/HttpExceptionFilter';
-import { CatchEverythingFilter } from './common/filters/CatchEverythingFilter';
+// import { CatchEverythingFilter } from './common/filters/CatchEverythingFilter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -29,8 +29,8 @@ async function bootstrap() {
     prefix: '/images',
   });
   const options = new DocumentBuilder()
-    .setTitle('hsy 接口文档')
-    .setDescription('hsy 接口文档的描述xxx')
+    .setTitle('若依监控系统接口文档')
+    .setDescription('若依监控系统接口文档描述')
     .setVersion('v1.0.0')
     .build();
   const document = SwaggerModule.createDocument(app, options);

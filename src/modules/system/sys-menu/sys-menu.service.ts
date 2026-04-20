@@ -3,7 +3,7 @@ import { SysMenuEntity } from './entities/sys-menu.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Meta, RouterVo } from './vo/sys-menu.vo';
-import { SysUserEnum } from '../sys-user/enum/sys-user.enum';
+import { SysUserEnum } from '../sys-user/enums/sys-user.enum';
 
 @Injectable()
 export class SysMenuService {
@@ -15,7 +15,7 @@ export class SysMenuService {
   async selectMenuTreeByUserId() {
     const menus: Array<SysMenuEntity> = await this.sysMenuRepository.find({
       where: {
-        // menuType: In(['M', 'C']),
+        menuType: In(['M', 'C']),
         status: '0',
       },
       order: {
@@ -65,7 +65,7 @@ export class SysMenuService {
     const routers: Array<RouterVo> = [];
     for (const menu of menus) {
       const router = new RouterVo();
-      router.hidden = '1' !== menu.visible;
+      router.hidden = '1' === menu.visible;
       router.name = this.getRouteName(menu);
       router.path = this.getRouterPath(menu);
       router.component = this.getComponent(menu);
@@ -74,10 +74,13 @@ export class SysMenuService {
       meta.title = menu.menuName;
       meta.icon = menu.icon;
       meta.noCache = menu.isCache === 1;
-      meta.link = menu.path;
+      meta.link = this.isHttp(menu.path) ? menu.path : null;
       router.meta = meta;
       const cMenus = menu.children;
-      if (cMenus.length > 0 && SysUserEnum.TYPE_DIR === menu.menuType) {
+      if (
+        cMenus.length > 0 &&
+        SysUserEnum.TYPE_DIR.valueOf() === menu.menuType
+      ) {
         router.alwaysShow = true;
         router.redirect = 'noRedirect';
         router.children = this.buildMenus(cMenus);
@@ -93,7 +96,7 @@ export class SysMenuService {
         meta.title = menu.menuName;
         meta.icon = menu.icon;
         meta.noCache = menu.isCache === 1;
-        meta.link = menu.path;
+        meta.link = this.isHttp(menu.path) ? menu.path : null;
         childrenRouter.query = menu.query;
         childrenRouters.push(childrenRouter);
         router.children = childrenRouters;
@@ -135,7 +138,14 @@ export class SysMenuService {
     if (this.isMenuFrame(menu)) {
       return '';
     }
-    return menu.routeName ? menu.routeName : menu.path;
+    return this.capitalize(menu.routeName ? menu.routeName : menu.path);
+  }
+
+  capitalize(str: string): string {
+    if (str == null) return str; // 保持 null / undefined
+    if (str.length === 0) return str; // 空字符串直接返回
+
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   /**
@@ -165,8 +175,8 @@ export class SysMenuService {
       routerPath = this.innerLinkReplaceEach(routerPath);
     } else if (
       menu.parentId === '0' &&
-      SysUserEnum.TYPE_DIR === menu.menuType &&
-      menu.isFrame === SysUserEnum.NO_FRAME
+      SysUserEnum.TYPE_DIR.valueOf() === menu.menuType &&
+      menu.isFrame === SysUserEnum.NO_FRAME.valueOf()
     ) {
       // 非外链并且是一级目录（类型为目录）
       routerPath = '/' + menu.path;
@@ -185,7 +195,9 @@ export class SysMenuService {
    * @return 结果
    */
   isInnerLink(menu: SysMenuEntity) {
-    return menu.isFrame === SysUserEnum.NO_FRAME && this.isHttp(menu.path);
+    return (
+      menu.isFrame === SysUserEnum.NO_FRAME.valueOf() && this.isHttp(menu.path)
+    );
   }
 
   isHttp(path: string) {
@@ -241,6 +253,8 @@ export class SysMenuService {
    * @return 结果
    */
   isParentView(menu: SysMenuEntity) {
-    return menu.parentId !== '0' && SysUserEnum.TYPE_DIR === menu.menuType;
+    return (
+      menu.parentId !== '0' && SysUserEnum.TYPE_DIR.valueOf() === menu.menuType
+    );
   }
 }

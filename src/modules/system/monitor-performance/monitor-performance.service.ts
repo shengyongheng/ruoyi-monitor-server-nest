@@ -9,6 +9,7 @@ import {
   PageLoadWaterfallMetricEnum,
   PerformanceMetricEnum,
 } from './enums/monitor-performance.enum';
+import { Cron } from '@nestjs/schedule';
 @Injectable()
 export class MonitorPerformanceService {
   constructor(
@@ -32,6 +33,7 @@ export class MonitorPerformanceService {
    * P95 → 极差体验 / 风险用户
    * @return
    */
+  // @Cron('30 * * * * *')
   async aggregatePerformanceMetric() {
     for (const type of Object.values(PerformanceMetricEnum)) {
       const typeValueof = type.valueOf();
@@ -89,6 +91,7 @@ export class MonitorPerformanceService {
   }
 
   // 瀑图数据
+  // @Cron('30 * * * * *')
   async aggregatePageLoadWaterfallMetrics() {
     const pageLoadMetricList = await this.performanceMetricRepository.find({
       where: {

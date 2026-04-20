@@ -17,7 +17,7 @@ export class Meta {
   /**
    * 内链地址（http(s)://开头）
    */
-  link: string;
+  link: string | null;
 }
 
 /**

@@ -11,4 +11,6 @@ export enum SysUserEnum {
   PARENT_VIEW = 'ParentView',
   /** InnerLink组件标识 */
   INNER_LINK = 'InnerLink',
+  /** Jwt secret */
+  JWT_SECRET = 'DO NOT USE THIS VALUE. INSTEAD, CREATE A COMPLEX SECRET AND KEEP IT SAFE OUTSIDE OF THE SOURCE CODE.',
 }

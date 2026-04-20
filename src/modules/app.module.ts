@@ -4,7 +4,6 @@ import appConfig from 'src/config/app.config';
 // import { databaseConfig } from '../../config/database.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
-import { TasksService } from 'src/common/task/task';
 import { RuoyiMonitorModule } from './sdk/ruoyi-monitor/ruoyi-monitor.module';
 import { MonitorUserbehaviorModule } from './system/monitor-userbehavior/monitor-userbehavior.module';
 import { MonitorPerformanceModule } from './system/monitor-performance/monitor-performance.module';
@@ -25,6 +24,7 @@ import { MonitorResource } from './system/monitor-resource/entities/monitor-reso
 import { MonitorPerformanceMetric } from './system/monitor-performance/entities/monitor-performance-metric.entity';
 import { SysPageloadMetricAgg } from './system/monitor-performance/entities/sys-pageload-metric-agg.entity';
 import { SysPerformanceMetricAgg } from './system/monitor-performance/entities/sys-performance-metric-agg.entity';
+import { RedisModule } from './system/redis/redis.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -67,7 +67,8 @@ import { SysPerformanceMetricAgg } from './system/monitor-performance/entities/s
     MonitorEnvironmentModule,
     SysUserModule,
     SysMenuModule,
+    RedisModule,
   ],
-  providers: [TasksService],
+  providers: [],
 })
 export class AppModule {}

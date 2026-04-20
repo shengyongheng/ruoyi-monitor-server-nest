@@ -171,5 +171,5 @@ export class SysMenuEntity {
   remark: string;
 
   /** 子菜单 */
-  children: Array<SysMenuEntity>;
+  children: Array<SysMenuEntity> = [];
 }
