@@ -3,7 +3,7 @@ import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import Redis from 'ioredis';
 
 @Injectable()
-export class RedisService implements OnModuleDestroy {
+export class SysRedisService implements OnModuleDestroy {
   private client: Redis;
 
   constructor() {

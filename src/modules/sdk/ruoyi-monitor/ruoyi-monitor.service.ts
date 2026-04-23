@@ -14,7 +14,7 @@ import { MonitorPerformanceMetric } from 'src/modules/system/monitor-performance
 import { SysPageloadMetricAgg } from 'src/modules/system/monitor-performance/entities/sys-pageload-metric-agg.entity';
 import { SysPerformanceMetricAgg } from 'src/modules/system/monitor-performance/entities/sys-performance-metric-agg.entity';
 import { BaseEntity } from 'src/modules/base.entity';
-import { ConstantsEnum } from 'src/common/enums/ConstantsEnums';
+import { ConstantsEnum } from 'src/common/enums/ConstantsEnum';
 
 @Injectable()
 export class RuoyiMonitorService {

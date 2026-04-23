@@ -24,7 +24,7 @@ import { MonitorResource } from './system/monitor-resource/entities/monitor-reso
 import { MonitorPerformanceMetric } from './system/monitor-performance/entities/monitor-performance-metric.entity';
 import { SysPageloadMetricAgg } from './system/monitor-performance/entities/sys-pageload-metric-agg.entity';
 import { SysPerformanceMetricAgg } from './system/monitor-performance/entities/sys-performance-metric-agg.entity';
-import { RedisModule } from './system/redis/redis.module';
+import { SysRedisModule } from './system/sys-redis/sys-redis.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -67,7 +67,7 @@ import { RedisModule } from './system/redis/redis.module';
     MonitorEnvironmentModule,
     SysUserModule,
     SysMenuModule,
-    RedisModule,
+    SysRedisModule,
   ],
   providers: [],
 })

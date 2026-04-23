@@ -4,7 +4,7 @@ import { SysUserService } from './sys-user.service';
 import { SysUserController } from './sys-user.controller';
 import { SysMenuModule } from '../sys-menu/sys-menu.module';
 import { SysUserEntity } from './entities/sys-user.entity';
-import { RedisModule } from '../redis/redis.module';
+import { SysRedisModule } from '../sys-redis/sys-redis.module';
 import { JwtModule } from '@nestjs/jwt';
 import { SysUserEnum } from './enums/sys-user.enum';
 @Module({
@@ -16,7 +16,7 @@ import { SysUserEnum } from './enums/sys-user.enum';
       signOptions: { expiresIn: '60s' },
     }),
     SysMenuModule,
-    RedisModule,
+    SysRedisModule,
   ],
   controllers: [SysUserController],
   providers: [SysUserService],
