@@ -1,10 +1,12 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { RuoyiMonitorService } from './ruoyi-monitor.service';
 import { RuoyiMonitorReportDto } from './dto/ruoyi-monitor.dto';
-import { Roles } from 'src/common/decorators/Roles';
+import { Auths } from 'src/common/decorators/Auths';
 import { RolesEnum } from 'src/common/enums/RolesEnum';
+import { AuthGuard } from 'src/common/guard/AuthGuard';
 
 @Controller('ruoyi-monitor')
+@UseGuards(AuthGuard)
 export class RuoyiMonitorController {
   constructor(private readonly ruoyiMonitorService: RuoyiMonitorService) {}
 
@@ -14,8 +16,11 @@ export class RuoyiMonitorController {
   }
 
   @Post('create_project')
-  @Roles(RolesEnum.Admin)
+  @Auths({
+    roles: RolesEnum.Admin,
+    permission: 'system:project:create',
+  })
   async createProject() {
-    await Promise.resolve('有 Admin 权限');
+    return await Promise.resolve('有 Admin 权限');
   }
 }

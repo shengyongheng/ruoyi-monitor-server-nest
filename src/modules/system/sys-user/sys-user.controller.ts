@@ -3,11 +3,14 @@ import { SysUserService } from './sys-user.service';
 import { LoginDto } from './dto/sys-user.dto';
 import { SysMenuService } from '../sys-menu/sys-menu.service';
 import { SysMenuEntity } from '../sys-menu/entities/sys-menu.entity';
+import { SysRedisService } from '../sys-redis/sys-redis.service';
+import { SysRedisEnum } from '../sys-redis/enums/sys-redis.enum';
 @Controller()
 export class SysUserController {
   constructor(
     private readonly sysUserService: SysUserService,
     private readonly sysMenuService: SysMenuService,
+    private readonly redisService: SysRedisService,
   ) {}
 
   @Get('captchaImage')
@@ -26,7 +29,11 @@ export class SysUserController {
    * @return 用户信息
    */
   @Get('getInfo')
-  getInfo() {
+  async getInfo() {
+    await this.redisService.set(SysRedisEnum.AUTHS_KEY, {
+      roles: 'admin',
+      permission: '*:*:*',
+    });
     return {
       user: null,
       roles: 'admin',

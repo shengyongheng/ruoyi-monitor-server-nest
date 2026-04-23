@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { SysRoleMenuEntity } from './sys-role-menu.entity';
 
 @Entity({ name: 'sys_menu' })
 export class SysMenuEntity {
@@ -172,4 +174,7 @@ export class SysMenuEntity {
 
   /** 子菜单 */
   children: Array<SysMenuEntity> = [];
+
+  @OneToMany(() => SysRoleMenuEntity, (rm) => rm.role)
+  roleMenus: SysRoleMenuEntity[];
 }

@@ -7,8 +7,9 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
-import { ROLES_KEY } from '../decorators/Roles';
-import { RolesEnum } from '../enums/RolesEnum';
+import { AUTHS_KEY, IAuth } from '../decorators/Auths';
+import { SysRedisService } from 'src/modules/system/sys-redis/sys-redis.service';
+import { SysRedisEnum } from 'src/modules/system/sys-redis/enums/sys-redis.enum';
 
 /**
  * 每个守卫都必须实现一个 canActivate() 函数。
@@ -25,6 +26,7 @@ import { RolesEnum } from '../enums/RolesEnum';
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
+    private redisService: SysRedisService,
     private reflector: Reflector,
   ) {}
 
@@ -50,17 +52,20 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    const roles = this.reflector.getAllAndOverride<RolesEnum[]>(ROLES_KEY, [
+    const auths = this.reflector.getAllAndOverride<IAuth[]>(AUTHS_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
-    // console.log('roles:', roles);
-    if (!roles) {
+    console.log('auths:', auths);
+    if (!auths) {
       return true;
     }
-    console.log('request:', request);
-    const userRoles = ['admin', 'user'];
-    return this.matchRoles(roles, userRoles);
+    const { roles, permission } = (await this.redisService.get<IAuth>(
+      SysRedisEnum.AUTHS_KEY,
+    )) || { roles: '', permission: '' };
+    console.log('roles:', roles);
+    console.log('permission:', permission);
+    return this.validateAuths(auths, roles, permission);
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
@@ -68,8 +73,9 @@ export class AuthGuard implements CanActivate {
     return type === 'Bearer' ? token : undefined;
   }
 
-  private matchRoles(roles: any, userRoles: any) {
-    console.log(roles, userRoles);
-    return true;
+  private validateAuths(auths: IAuth[], roles: string, permission: string) {
+    return (
+      auths[0].roles.valueOf() === roles && auths[0].permission === permission
+    );
   }
 }

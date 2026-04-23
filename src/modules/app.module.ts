@@ -25,6 +25,10 @@ import { MonitorPerformanceMetric } from './system/monitor-performance/entities/
 import { SysPageloadMetricAgg } from './system/monitor-performance/entities/sys-pageload-metric-agg.entity';
 import { SysPerformanceMetricAgg } from './system/monitor-performance/entities/sys-performance-metric-agg.entity';
 import { SysRedisModule } from './system/sys-redis/sys-redis.module';
+import { SysUserEntity } from './system/sys-user/entities/sys-user.entity';
+import { SysUserRoleEntity } from './system/sys-user/entities/sys-user-role.entity';
+import { SysRoleEntity } from './system/sys-user/entities/sys-role.entity';
+import { SysRoleMenuEntity } from './system/sys-menu/entities/sys-role-menu.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -43,7 +47,11 @@ import { SysRedisModule } from './system/sys-redis/sys-redis.module';
       password: 'admin123',
       database: 'ruoyi_monitor',
       entities: [
+        SysUserEntity,
         SysMenuEntity,
+        SysUserRoleEntity,
+        SysRoleEntity,
+        SysRoleMenuEntity,
         MonitorUserBehavior,
         MonitorPageStaytime,
         MonitorRouteChange,
