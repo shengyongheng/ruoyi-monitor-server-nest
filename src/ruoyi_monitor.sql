@@ -303,6 +303,57 @@ CREATE TABLE `monitor_vue2`
   DEFAULT CHARSET = utf8mb4 COMMENT ='vue2 表';
 
 -- ----------------------------
+-- 2、用户信息表
+-- ----------------------------
+drop table if exists sys_user;
+create table sys_user (
+  user_id           bigint(20)      not null auto_increment    comment '用户ID',
+  user_name         varchar(30)     not null                   comment '用户昵称',
+  password          varchar(100)    default ''                 comment '密码',
+  status            char(1)         default '0'                comment '帐号状态（0正常 1停用）',
+  del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
+  create_time       datetime                                   comment '创建时间',
+  update_time       datetime                                   comment '更新时间',
+  remark            varchar(500)    default null               comment '备注',
+  primary key (user_id)
+) engine=innodb auto_increment=100 comment = '用户信息表';
+
+-- ----------------------------
+-- 初始化-用户信息表数据
+-- ----------------------------
+insert into sys_user values(1, '若依', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', sysdate(), null, '管理员');
+insert into sys_user values(2, '若依', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', sysdate(), null, '测试员');
+
+-- ----------------------------
+-- 4、角色信息表
+-- ----------------------------
+
+drop table if exists sys_role;
+create table sys_role (
+  role_id              bigint(20)      not null auto_increment    comment '角色ID',
+  role_name            varchar(30)     not null                   comment '角色名称',
+  role_key             varchar(100)    not null                   comment '角色权限字符串',
+  role_sort            int(4)          not null                   comment '显示顺序',
+  data_scope           char(1)         default '1'                comment '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
+  menu_check_strictly  tinyint(1)      default 1                  comment '菜单树选择项是否关联显示',
+  dept_check_strictly  tinyint(1)      default 1                  comment '部门树选择项是否关联显示',
+  status               char(1)         not null                   comment '角色状态（0正常 1停用）',
+  del_flag             char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
+  create_by            varchar(64)     default ''                 comment '创建者',
+  create_time          datetime                                   comment '创建时间',
+  update_by            varchar(64)     default ''                 comment '更新者',
+  update_time          datetime                                   comment '更新时间',
+  remark               varchar(500)    default null               comment '备注',
+  primary key (role_id)
+) engine=innodb auto_increment=100 comment = '角色信息表';
+
+-- ----------------------------
+-- 初始化-角色信息表数据
+-- ----------------------------
+insert into sys_role values('1', '超级管理员',  'admin',  1, 1, 1, 1, '0', '0', 'admin', sysdate(), '', null, '超级管理员');
+insert into sys_role values('2', '普通角色',    'common', 2, 2, 1, 1, '0', '0', 'admin', sysdate(), '', null, '普通角色');
+
+-- ----------------------------
 -- 5、菜单权限表
 -- ----------------------------
 drop table if exists sys_menu;
@@ -632,6 +683,38 @@ values ('1059', '预览代码', '116', '5', '#', '', '', '', 1, 0, 'F', '0', '0'
 insert into sys_menu
 values ('1060', '生成代码', '116', '6', '#', '', '', '', 1, 0, 'F', '0', '0', 'tool:gen:code', '#', 'admin', sysdate(),
         '', null, '');
+
+-- ----------------------------
+-- 6、用户和角色关联表  用户N-1角色
+-- ----------------------------
+drop table if exists sys_user_role;
+create table sys_user_role (
+  user_id   bigint(20) not null comment '用户ID',
+  role_id   bigint(20) not null comment '角色ID',
+  primary key(user_id, role_id)
+) engine=innodb comment = '用户和角色关联表';
+
+-- ----------------------------
+-- 初始化-用户和角色关联表数据
+-- ----------------------------
+insert into sys_user_role values ('1', '1');
+insert into sys_user_role values ('2', '2');
+
+
+-- ----------------------------
+-- 7、角色和菜单关联表  角色1-N菜单
+-- ----------------------------
+drop table if exists sys_role_menu;
+create table sys_role_menu (
+  role_id   bigint(20) not null comment '角色ID',
+  menu_id   bigint(20) not null comment '菜单ID',
+  primary key(role_id, menu_id)
+) engine=innodb comment = '角色和菜单关联表';
+
+-- ----------------------------
+-- 初始化-角色和菜单关联表数据
+-- ----------------------------
+insert into sys_role_menu values ('2', '1');
 
 -- ----------------------------
 -- 性能指标聚合表
