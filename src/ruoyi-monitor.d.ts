@@ -7,3 +7,10 @@ interface ISourceMap {
   names: Array<string>;
   sourceRoot: string;
 }
+
+interface ITokenPayload {
+  username: string;
+  userId: string;
+  iat: number;
+  exp: number;
+}

@@ -27,7 +27,7 @@ export class SysUserEntity {
     nullable: false,
     comment: '用户昵称',
   })
-  userName: string;
+  username: string;
 
   @Column({
     name: 'password',

@@ -18,7 +18,7 @@ export class RuoyiMonitorController {
   @Post('create_project')
   @Auths({
     roles: RolesEnum.Admin,
-    permission: 'system:project:create',
+    permission: 'system:rbac:query',
   })
   async createProject() {
     return await Promise.resolve('有 Admin 权限');

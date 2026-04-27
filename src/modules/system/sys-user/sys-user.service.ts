@@ -7,11 +7,22 @@ import { SysRedisEnum } from '../sys-redis/enums/sys-redis.enum';
 import { SysRedisService } from '../sys-redis/sys-redis.service';
 import { LoginDto } from './dto/sys-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { SysUserEntity } from './entities/sys-user.entity';
+import { SysUserRoleEntity } from './entities/sys-user-role.entity';
+import { SysRoleEntity } from './entities/sys-role.entity';
+import { SysRoleMenuEntity } from '../sys-menu/entities/sys-role-menu.entity';
+import { SysMenuEntity } from '../sys-menu/entities/sys-menu.entity';
 
 const CAPTCHA_EXPIRATION_TIME = 60; // 60s
 @Injectable()
 export class SysUserService {
   constructor(
+    @InjectRepository(SysUserEntity)
+    private sysUserRepository: Repository<SysUserEntity>,
+    @InjectRepository(SysRoleEntity)
+    private sysRoleRepository: Repository<SysRoleEntity>,
     private readonly redisService: SysRedisService,
     private readonly jwtService: JwtService,
   ) {}
@@ -49,7 +60,70 @@ export class SysUserService {
     console.log('password:', password);
     console.log('code:', code);
     console.log('uuid:', uuid);
+    // TODO 验证码校验
+    const sysUser = await this.sysUserRepository.findOneBy({
+      username,
+      password,
+    });
+    if (sysUser) {
+      const roleIdAndKeys = await this.sysUserRepository
+        .createQueryBuilder('sysUser')
+        .leftJoinAndSelect(
+          SysUserRoleEntity,
+          'sysUserRole',
+          'sysUser.user_id = sysUserRole.user_id',
+        )
+        .leftJoinAndSelect(
+          SysRoleEntity,
+          'role',
+          'role.role_id = sysUserRole.role_id',
+        )
+        .where('sysUser.userId = :userId', { userId: sysUser.userId })
+        .select(
+          `
+            role.role_id as roleId,
+            role.role_key as roleKey
+          `,
+        )
+        .getRawMany<{ roleId: string; roleKey: string }>();
 
-    return { token: await this.jwtService.signAsync({ username }) };
+      const roleIds = roleIdAndKeys.map((roleIdAndKey) => roleIdAndKey.roleId);
+
+      const permissions = await this.sysRoleRepository
+        .createQueryBuilder('sysRole')
+        .leftJoinAndSelect(
+          SysRoleMenuEntity,
+          'sysRoleMenu',
+          'sysRole.role_id = sysRoleMenu.role_id',
+        )
+        .leftJoinAndSelect(
+          SysMenuEntity,
+          'sysMenu',
+          'sysMenu.menu_id = sysRoleMenu.menu_id',
+        )
+        .where('sysRole.role_id IN (:...roleIds)', { roleIds })
+        .groupBy('sysMenu.perms')
+        .select(
+          `
+            sysMenu.perms as permission
+          `,
+        )
+        .getRawMany<{ permission: string }>();
+
+      await this.redisService.set(
+        SysRedisEnum.USERS_KEY + sysUser.userId,
+        JSON.stringify({
+          user: sysUser,
+          permissions: permissions.map((item) => item.permission),
+          roles: roleIdAndKeys.map((roleIdAndKey) => roleIdAndKey.roleKey),
+        }),
+      );
+
+      const token = await this.jwtService.signAsync({
+        username,
+        userId: sysUser.userId,
+      });
+      return { token };
+    }
   }
 }

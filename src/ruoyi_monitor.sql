@@ -1,24 +1,24 @@
 -- 创建 ruoyi_monitor 数据库
 CREATE
-DATABASE ruoyi_monitor
+    DATABASE ruoyi_monitor
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 
 use
-ruoyi_monitor;
+    ruoyi_monitor;
 
 CREATE TABLE `monitor_project`
 (
     `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
 
-    `project_key` VARCHAR(64)  NOT NULL COMMENT '对外暴露的项目ID（短ID）',
-    `public_key`  VARCHAR(128) NOT NULL COMMENT 'SDK 使用的公钥（可公开）',
-    `name`        VARCHAR(100) NOT NULL COMMENT '项目名称',
+    `project_key` VARCHAR(64)     NOT NULL COMMENT '对外暴露的项目ID（短ID）',
+    `public_key`  VARCHAR(128)    NOT NULL COMMENT 'SDK 使用的公钥（可公开）',
+    `name`        VARCHAR(100)    NOT NULL COMMENT '项目名称',
 
     `is_deleted`  TINYINT(1)      NOT NULL DEFAULT 0 COMMENT '逻辑删除：0-未删除，1-已删除',
 
-    `create_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `create_time` DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_project_key` (`project_key`)
@@ -30,17 +30,17 @@ CREATE TABLE `monitor_project`
 CREATE TABLE `monitor_performance_metric`
 (
     `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `project_key` VARCHAR(64)  NOT NULL,
-    `session_id`  VARCHAR(255) NOT NULL,
-    `user_id`     int          NOT NULL,
-    `username`    VARCHAR(32)  NOT NULL,
-    `type`        VARCHAR(20)  NOT NULL,
-    `event_type`  VARCHAR(32)  NOT NULL,
-    `value` DOUBLE NOT NULL,
-    `timestamp`   bigint       NOT NULL,
+    `project_key` VARCHAR(64)     NOT NULL,
+    `session_id`  VARCHAR(255)    NOT NULL,
+    `user_id`     int             NOT NULL,
+    `username`    VARCHAR(32)     NOT NULL,
+    `type`        VARCHAR(20)     NOT NULL,
+    `event_type`  VARCHAR(32)     NOT NULL,
+    `value`       DOUBLE          NOT NULL,
+    `timestamp`   bigint          NOT NULL,
 
     PRIMARY KEY (`id`),
-    KEY           `idx_project_metric_time` (`project_key`, `type`, `event_type`, `timestamp`)
+    KEY `idx_project_metric_time` (`project_key`, `type`, `event_type`, `timestamp`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci
@@ -61,24 +61,24 @@ CREATE TABLE `monitor_resource`
 
     `cached`         TINYINT(1)  DEFAULT 0 COMMENT '是否命中缓存',
     `decoded_size`   BIGINT      DEFAULT 0 COMMENT '解码后资源大小(bytes)',
-    `duration` DOUBLE DEFAULT 0 COMMENT '资源加载总耗时(ms)',
+    `duration`       DOUBLE      DEFAULT 0 COMMENT '资源加载总耗时(ms)',
     `encoded_size`   BIGINT      DEFAULT 0 COMMENT '编码后资源大小(bytes)',
     `initiator_type` VARCHAR(32) DEFAULT NULL COMMENT '资源发起类型(script/img/css/fetch)',
     `name`           VARCHAR(512) NOT NULL COMMENT '资源URL',
-    `start_time` DOUBLE DEFAULT 0 COMMENT '开始时间(performance.now)',
+    `start_time`     DOUBLE      DEFAULT 0 COMMENT '开始时间(performance.now)',
     `status`         VARCHAR(16) DEFAULT NULL COMMENT '资源状态(success/error)',
     `transfer_size`  BIGINT      DEFAULT 0 COMMENT '传输大小(bytes)',
 
     -- timing 拆分字段
-    `dns` DOUBLE DEFAULT 0 COMMENT 'DNS解析耗时(ms)',
-    `tcp` DOUBLE DEFAULT 0 COMMENT 'TCP连接耗时(ms)',
-    `ssl` DOUBLE DEFAULT 0 COMMENT 'SSL握手耗时(ms)',
-    `download` DOUBLE DEFAULT 0 COMMENT '下载耗时(ms)',
+    `dns`            DOUBLE      DEFAULT 0 COMMENT 'DNS解析耗时(ms)',
+    `tcp`            DOUBLE      DEFAULT 0 COMMENT 'TCP连接耗时(ms)',
+    `ssl`            DOUBLE      DEFAULT 0 COMMENT 'SSL握手耗时(ms)',
+    `download`       DOUBLE      DEFAULT 0 COMMENT '下载耗时(ms)',
 
     PRIMARY KEY (`id`),
-    KEY              `idx_initiator_type` (`initiator_type`),
-    KEY              `idx_status` (`status`),
-    KEY              `idx_name_prefix` (`name`(128))
+    KEY `idx_initiator_type` (`initiator_type`),
+    KEY `idx_status` (`status`),
+    KEY `idx_name_prefix` (`name`(128))
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
     COMMENT ='前端资源性能监控表';
@@ -306,52 +306,60 @@ CREATE TABLE `monitor_vue2`
 -- 2、用户信息表
 -- ----------------------------
 drop table if exists sys_user;
-create table sys_user (
-  user_id           bigint(20)      not null auto_increment    comment '用户ID',
-  user_name         varchar(30)     not null                   comment '用户昵称',
-  password          varchar(100)    default ''                 comment '密码',
-  status            char(1)         default '0'                comment '帐号状态（0正常 1停用）',
-  del_flag          char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
-  create_time       datetime                                   comment '创建时间',
-  update_time       datetime                                   comment '更新时间',
-  remark            varchar(500)    default null               comment '备注',
-  primary key (user_id)
-) engine=innodb auto_increment=100 comment = '用户信息表';
+create table sys_user
+(
+    user_id     bigint(20)  not null auto_increment comment '用户ID',
+    user_name   varchar(30) not null comment '用户昵称',
+    password    varchar(100) default '' comment '密码',
+    status      char(1)      default '0' comment '帐号状态（0正常 1停用）',
+    del_flag    char(1)      default '0' comment '删除标志（0代表存在 2代表删除）',
+    create_time datetime comment '创建时间',
+    update_time datetime comment '更新时间',
+    remark      varchar(500) default null comment '备注',
+    primary key (user_id)
+) engine = innodb
+  auto_increment = 100 comment = '用户信息表';
 
 -- ----------------------------
 -- 初始化-用户信息表数据
 -- ----------------------------
-insert into sys_user values(1, '若依', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', sysdate(), null, '管理员');
-insert into sys_user values(2, '若依', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', sysdate(), null, '测试员');
+insert into sys_user
+values (1, '若依', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', sysdate(), null, '管理员');
+insert into sys_user
+values (2, '若依', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', sysdate(), null, '测试员');
 
 -- ----------------------------
 -- 4、角色信息表
 -- ----------------------------
 
 drop table if exists sys_role;
-create table sys_role (
-  role_id              bigint(20)      not null auto_increment    comment '角色ID',
-  role_name            varchar(30)     not null                   comment '角色名称',
-  role_key             varchar(100)    not null                   comment '角色权限字符串',
-  role_sort            int(4)          not null                   comment '显示顺序',
-  data_scope           char(1)         default '1'                comment '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
-  menu_check_strictly  tinyint(1)      default 1                  comment '菜单树选择项是否关联显示',
-  dept_check_strictly  tinyint(1)      default 1                  comment '部门树选择项是否关联显示',
-  status               char(1)         not null                   comment '角色状态（0正常 1停用）',
-  del_flag             char(1)         default '0'                comment '删除标志（0代表存在 2代表删除）',
-  create_by            varchar(64)     default ''                 comment '创建者',
-  create_time          datetime                                   comment '创建时间',
-  update_by            varchar(64)     default ''                 comment '更新者',
-  update_time          datetime                                   comment '更新时间',
-  remark               varchar(500)    default null               comment '备注',
-  primary key (role_id)
-) engine=innodb auto_increment=100 comment = '角色信息表';
+create table sys_role
+(
+    role_id             bigint(20)   not null auto_increment comment '角色ID',
+    role_name           varchar(30)  not null comment '角色名称',
+    role_key            varchar(100) not null comment '角色权限字符串',
+    role_sort           int(4)       not null comment '显示顺序',
+    data_scope          char(1)      default '1' comment '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
+    menu_check_strictly tinyint(1)   default 1 comment '菜单树选择项是否关联显示',
+    dept_check_strictly tinyint(1)   default 1 comment '部门树选择项是否关联显示',
+    status              char(1)      not null comment '角色状态（0正常 1停用）',
+    del_flag            char(1)      default '0' comment '删除标志（0代表存在 2代表删除）',
+    create_by           varchar(64)  default '' comment '创建者',
+    create_time         datetime comment '创建时间',
+    update_by           varchar(64)  default '' comment '更新者',
+    update_time         datetime comment '更新时间',
+    remark              varchar(500) default null comment '备注',
+    primary key (role_id)
+) engine = innodb
+  auto_increment = 100 comment = '角色信息表';
 
 -- ----------------------------
 -- 初始化-角色信息表数据
 -- ----------------------------
-insert into sys_role values('1', '超级管理员',  'admin',  1, 1, 1, 1, '0', '0', 'admin', sysdate(), '', null, '超级管理员');
-insert into sys_role values('2', '普通角色',    'common', 2, 2, 1, 1, '0', '0', 'admin', sysdate(), '', null, '普通角色');
+insert into sys_role
+values ('1', '超级管理员', 'admin', 1, 1, 1, 1, '0', '0', 'admin', sysdate(), '', null, '超级管理员');
+insert into sys_role
+values ('2', '普通角色', 'common', 2, 2, 1, 1, '0', '0', 'admin', sysdate(), '', null, '普通角色');
 
 -- ----------------------------
 -- 5、菜单权限表
@@ -387,6 +395,10 @@ insert into sys_menu
 values ('1', '前端监控', '0', '1', 'sdk-monitor', null, '', '', 1, 0, 'M', '0', '0', '', 'monitor', 'admin', sysdate(),
         '',
         null, '前端监控目录');
+insert into sys_menu
+values ('2', 'RBAC 鉴权', '0', '2', 'rbac', null, '', '', 1, 0, 'M', '0', '0', '', 'rbac', 'admin', sysdate(),
+        '',
+        null, 'RBAC 鉴权');
 
 -- 二级菜单
 insert into sys_menu
@@ -408,6 +420,15 @@ insert into sys_menu
 values ('103', '资源监控', '1', '4', 'resource', 'sdk-monitor/resource/index', '', '', 1, 0, 'C', '0', '0',
         'system:user:list4',
         'user', 'admin', sysdate(), '', null, '资源监控');
+insert into sys_menu
+values ('200', 'Rbac 菜单', '2', '1', 'rbac01', 'rbac/rbac01/index', '', '', 1, 0, 'C', '0', '0',
+        'system:rbac:list1',
+        'user', 'admin', sysdate(), '', null, 'Rbac 菜单');
+
+-- RBAC 按钮
+insert into sys_menu
+values ('2000', '管理员可操作按钮', '200', '1', '', '', '', '', 1, 0, 'F', '0', '0', 'system:rbac:query', '#', 'admin',
+        sysdate(), '', null, '');
 
 -- ----------------------------
 -- 初始化-菜单信息表数据
@@ -688,33 +709,38 @@ values ('1060', '生成代码', '116', '6', '#', '', '', '', 1, 0, 'F', '0', '0'
 -- 6、用户和角色关联表  用户N-1角色
 -- ----------------------------
 drop table if exists sys_user_role;
-create table sys_user_role (
-  user_id   bigint(20) not null comment '用户ID',
-  role_id   bigint(20) not null comment '角色ID',
-  primary key(user_id, role_id)
-) engine=innodb comment = '用户和角色关联表';
+create table sys_user_role
+(
+    user_id bigint(20) not null comment '用户ID',
+    role_id bigint(20) not null comment '角色ID',
+    primary key (user_id, role_id)
+) engine = innodb comment = '用户和角色关联表';
 
 -- ----------------------------
 -- 初始化-用户和角色关联表数据
 -- ----------------------------
-insert into sys_user_role values ('1', '1');
-insert into sys_user_role values ('2', '2');
+insert into sys_user_role
+values ('1', '1');
+insert into sys_user_role
+values ('2', '2');
 
 
 -- ----------------------------
 -- 7、角色和菜单关联表  角色1-N菜单
 -- ----------------------------
 drop table if exists sys_role_menu;
-create table sys_role_menu (
-  role_id   bigint(20) not null comment '角色ID',
-  menu_id   bigint(20) not null comment '菜单ID',
-  primary key(role_id, menu_id)
-) engine=innodb comment = '角色和菜单关联表';
+create table sys_role_menu
+(
+    role_id bigint(20) not null comment '角色ID',
+    menu_id bigint(20) not null comment '菜单ID',
+    primary key (role_id, menu_id)
+) engine = innodb comment = '角色和菜单关联表';
 
 -- ----------------------------
 -- 初始化-角色和菜单关联表数据
 -- ----------------------------
-insert into sys_role_menu values ('2', '1');
+insert into sys_role_menu
+values ('2', '1');
 
 -- ----------------------------
 -- 性能指标聚合表
@@ -722,8 +748,8 @@ insert into sys_role_menu values ('2', '1');
 drop table if exists sys_performance_metric_agg;
 create table sys_performance_metric_agg
 (
-    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `type` VARCHAR(20) default '',
+    `id`        BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `type`      VARCHAR(20) default '',
     `p50_value` DOUBLE NOT NULL,
     `p75_value` DOUBLE NOT NULL,
     `p90_value` DOUBLE NOT NULL,
@@ -738,8 +764,8 @@ create table sys_performance_metric_agg
 drop table if exists sys_pageload_metric_agg;
 create table sys_pageload_metric_agg
 (
-    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `type` VARCHAR(20) default '',
+    `id`        BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `type`      VARCHAR(20) default '',
     `p50_value` DOUBLE NOT NULL,
     `p75_value` DOUBLE NOT NULL,
     `p90_value` DOUBLE NOT NULL,

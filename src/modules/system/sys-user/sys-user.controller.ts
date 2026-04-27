@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { SysUserService } from './sys-user.service';
 import { LoginDto } from './dto/sys-user.dto';
 import { SysMenuService } from '../sys-menu/sys-menu.service';
@@ -28,12 +28,9 @@ export class SysUserController {
    *
    * @return 用户信息
    */
-  @Get('getInfo')
-  async getInfo() {
-    await this.redisService.set(SysRedisEnum.AUTHS_KEY, {
-      roles: 'admin',
-      permission: '*:*:*',
-    });
+  @Get('getInfo/:userId')
+  async getInfo(@Param('userId') userId: string) {
+    return await this.redisService.get(SysRedisEnum.USERS_KEY + userId);
     return {
       user: null,
       roles: 'admin',

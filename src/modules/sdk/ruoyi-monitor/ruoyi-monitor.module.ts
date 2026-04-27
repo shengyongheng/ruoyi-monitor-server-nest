@@ -13,7 +13,7 @@ import { MonitorResource } from 'src/modules/system/monitor-resource/entities/mo
 import { MonitorUserBehavior } from 'src/modules/system/monitor-userbehavior/entities/monitor-userbehavior.entity';
 import { MonitorPageStaytime } from 'src/modules/system/monitor-userbehavior/entities/monitor-page-staytime.entity';
 import { MonitorRouteChange } from 'src/modules/system/monitor-userbehavior/entities/monitor-route-change.entity';
-import { SysRedisModule } from 'src/modules/system/sys-redis/sys-redis.module';
+// import { SysRedisModule } from 'src/modules/system/sys-redis/sys-redis.module';
 
 @Module({
   imports: [
@@ -30,7 +30,7 @@ import { SysRedisModule } from 'src/modules/system/sys-redis/sys-redis.module';
       MonitorPageStaytime,
       MonitorRouteChange,
     ]),
-    SysRedisModule,
+    // SysRedisModule,
   ],
   controllers: [RuoyiMonitorController],
   providers: [RuoyiMonitorService],
