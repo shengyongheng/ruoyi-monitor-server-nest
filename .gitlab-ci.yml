@@ -1,0 +1,66 @@
+# 多服务 CI/CD
+
+# CI 变量
+# CI_REGISTRY_USER      # 登录镜像仓库的用户名
+# CI_REGISTRY_PASSWORD  # 登录镜像仓库的密码（通常是 Token）
+# CI_REGISTRY           # Docker 镜像仓库地址，例如:registry.gitlab.com
+# CI_REGISTRY_IMAGE     # 镜像仓库路径，例如:registry.gitlab.com/<group>/<project>
+# SERVER_HOST       # 目标服务器 IP / 域名
+# SERVER_USER       # SSH 登录用户
+# SERVER_SSH_KEY        # SSH 私钥（用于免密码登录）
+
+stages:
+  - build
+  - deploy
+
+variables:
+  CONTAINER_NAME: ruoyi-monitor-server
+  NETWORK_NAME: app-network
+  MYSQL_VOLUME_DIR="/data/mysql"
+  REDIS_VOLUME_DIR="/data/redis"
+
+# 使用官方 docker:stable 作为基础镜像，支持构建和推送
+image: docker:stable
+
+services:
+  - docker:dind
+
+before_script:
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+
+build:
+  stage: build
+  script:
+    - docker build -t "$CI_REGISTRY_IMAGE:latest" .
+    - docker push "$CI_REGISTRY_IMAGE:latest"
+  only:
+    - master
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    # 安装 openssh-client
+    - apk add --no-cache openssh-client
+    # 写入 SSH 私钥
+    - mkdir -p ~/.ssh
+    - echo "$SERVER_SSH_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
+  script:
+    # 复制部署脚本到服务器并执行
+    - scp deploy-services.sh "$SERVER_USER@$SERVER_HOST:/tmp/deploy-services.sh"
+    - ssh "$SERVER_USER@$SERVER_HOST" "chmod +x /tmp/deploy-services.sh && \
+      NEST_IMAGE_NAME=$CI_REGISTRY_IMAGE \
+      MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
+      MYSQL_DATABASE=$MYSQL_DATABASE \
+      MYSQL_USER=$MYSQL_USER \
+      MYSQL_PASSWORD=$MYSQL_PASSWORD \
+      REDIS_PASSWORD=$REDIS_PASSWORD \
+      CONTAINER_NAME=$CONTAINER_NAME \
+      NETWORK_NAME=$NETWORK_NAME \
+      MYSQL_VOLUME_DIR=$MYSQL_VOLUME_DIR \
+      REDIS_VOLUME_DIR=$REDIS_VOLUME_DIR \
+      /tmp/deploy-services.sh"
+  only:
+    - master
