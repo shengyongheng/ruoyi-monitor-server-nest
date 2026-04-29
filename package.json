@@ -1,10 +1,10 @@
 {
   "name": "ruoyi-monitor",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "基于 NestJS 的监控系统后端服务，采用 TypeScript 开发，支持 MySQL 与 Redis，提供高性能 API 及容器化部署。",
+  "author": "shengyongheng <shengyongheng@github.com>",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
