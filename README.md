@@ -17,7 +17,7 @@
     <img src="https://img.shields.io/badge/NestJS-11.0-E0234E?style=flat-square&logo=nestjs" alt="NestJS" />
   </a>
   <a href="https://github.com/shengyongheng/ruoyi-monitor-server-nest/blob/master/LICENSE" target="_blank">
-    <img src="https://img.shields.io/badge/license-UNLICENSED-blue?style=flat-square" alt="License" />
+    <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License" />
   </a>
 </p>
 

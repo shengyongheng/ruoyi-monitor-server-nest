@@ -1,5 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { SysUserService } from './sys-user.service';
 import { SysUserController } from './sys-user.controller';
 import { SysMenuModule } from '../sys-menu/sys-menu.module';
@@ -25,6 +26,7 @@ import { SysRoleMenuEntity } from '../sys-menu/entities/sys-role-menu.entity';
       signOptions: { expiresIn: '600s' },
     }),
     SysMenuModule,
+    HttpModule,
   ],
   controllers: [SysUserController],
   providers: [SysUserService],
